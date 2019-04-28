@@ -11,6 +11,18 @@ class File {
 		this.ipfsSign = String
 	}		
 }
+//store like times everday
+class DailyLike {
+	//user address
+	address:string
+	//like times daily
+	likeTime:Mapping<number>
+	constructor(){
+		this.address = String
+		this.likeTime = new Mapping(number)()
+	}
+
+}
 //brand contract class
 export class BrandTokenContract extends AschContract{
 	//record the relation for id & file
@@ -24,6 +36,8 @@ export class BrandTokenContract extends AschContract{
 	// bonus for upload
 	bonusUploadNum = 5
 	costLikeNum = 2	
+	//map address with DailyLike
+	addForDailyLike : Mapping<DailyLike>
 	constructor(){
 		super()
 		this.idForFile = new Mapping<File>()
@@ -31,6 +45,7 @@ export class BrandTokenContract extends AschContract{
 		this.totalToken = BigInt(1000000000)
 		this.usedToken = BigInt(0)
 		this.userHolding = new Mapping<bigint>()
+		this.addForDailyLike = new Mapping<DailyLike>()
 	}
 	UploadFile(id:BigInt,ipfs:string): void {
 		const add = this.context.senderAddress
@@ -45,7 +60,18 @@ export class BrandTokenContract extends AschContract{
 		minusTokenToLike(add,this.costLikeNum)
 		
 	}
-	
+	DislikeFile(id:bigint):void{
+	   
+	}
+			
+	SignRoll(id:number,value:number | bigint):void{ 
+		
+	}	
+	//id game round num, num: bonus  num
+	DoRoll(id:number,num:number):Array{ 
+
+	}
+		
 	private sendTokenToUploader(address:string,value:bigint | number):void{
 		const holdNum =  this.userHolding[address]
 		if(!const){ 
