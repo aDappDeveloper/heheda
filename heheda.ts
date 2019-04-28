@@ -5,10 +5,12 @@ class File {
 	id : BigInt
 	//hash of the file on ipfs
 	ipfsSign:string
+	likeNum:Mapping<number>
 	constructor(){
 		this.id = BigInt(0)
 		this.address = String
 		this.ipfsSign = String
+		this.likeNum = new Mapping(number)()
 	}		
 }
 //store like times everday
@@ -90,6 +92,35 @@ export class BrandTokenContract extends AschContract{
 		this.usedToken -= value;
 		this.userHolding[address] -= value;
 	}
+
+	private addDailyLikeNum(address:string,value:number):void{
+		const today  = '2019-04-11' //rewrite with system funciton
+		const LikeNum =  this.addForDailyLike[address]
+		if(!LikeNum){ 
+			this.addForDailyLike[address] = new DailyLike()
+			LikeNum = this.addForDailyLike[address]
+		}
+		LikeNum.address = address
+		const Num = LikeNum.likeTime[today]
+		if(!Num){ 
+			Num = 0
+		}
+		assert(Num < 100 && Num >= 0,'today is over')
+		Num += 1
+	}
+	private minusDailyLikeNum(address:string,value:number):void{
+		const today = '2019-04-11' //rewrit with system fucntion
+		const LikeNum = this.addForDailyLike[address]
+		if(!LikeNum){
+			this.addForDailyLike[address] = new DailyLike()
+			LikeNum = this.addForDailyLike[address]
+		}
+		LikeNum.address = address
+		const Num = LikeNum.likeTime[today]
+		assert(Num && Num >=0 && Num <= 100,'like first')
+		Num -=1 
+	}
+
 
 
 }
